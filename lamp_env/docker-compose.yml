@@ -1,0 +1,42 @@
+version: "3.1"
+services:
+    apache:
+        build: .
+        ports:
+            - 8085:80
+        volumes:
+            - ./www:/var/www/html/
+            - ./apache2:/etc/apache2/
+        links:
+            - database
+        networks:
+            - default
+    database:
+        image: mysql:8.0
+        ports:
+            - 3307:3306
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_DATABASE: db_test
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test
+        volumes:
+            - ./dump:/docker-entrypoint-initdb.d
+            - ./conf:/etc/mysql/conf.d
+            - db_volume:/var/lib/mysql
+        networks:
+            - default
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links:
+            - database:db
+        ports:
+            - 9091:80
+        environment:
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test
+volumes:
+    db_volume:

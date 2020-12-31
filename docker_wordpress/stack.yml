@@ -1,0 +1,43 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 8888:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: test
+      WORDPRESS_DB_NAME: WORDPRESS_DB
+    volumes:
+      - wordpress:/var/www/html
+
+  db:
+    image: mysql:8.0
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: WORDPRESS_DB
+      MYSQL_ROOT_PASSWORD: test
+    volumes:
+      - db_:/var/lib/mysql
+
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      links:
+          - db:WORDPRESS_DB
+      ports:
+          - 9192:80
+      environment:
+          MYSQL_USER: root
+          MYSQL_PASSWORD: test
+          MYSQL_ROOT_PASSWORD: test
+
+volumes:
+  wordpress:
+  db_:

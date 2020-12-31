@@ -1,0 +1,42 @@
+version: "3.1"
+services:
+    apache_ex3:
+        build: .
+        ports:
+            - 8086:80
+        volumes:
+            - ./www:/var/www/html/
+            - ./apache2:/etc/apache2/
+        links:
+            - database_ex3
+        networks:
+            - default
+    database_ex3:
+        image: mysql:8.0
+        ports:
+            - 3310:3306
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_DATABASE: db_test_ex3
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test
+        volumes:
+            - ./dump:/docker-entrypoint-initdb.d
+            - ./conf:/etc/mysql/conf.d
+            - db_volume_ex3:/var/lib/mysql
+        networks:
+            - default
+
+    phpmyadmin_ex3:
+        image: phpmyadmin/phpmyadmin
+        links:
+            - database_ex3:db
+        ports:
+            - 9092:80
+        environment:
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test
+volumes:
+    db_volume_ex3:

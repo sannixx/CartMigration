@@ -1,0 +1,38 @@
+Metadata-Version: 2.1
+Name: anticaptchaofficial
+Version: 1.0.26
+Summary: Official anti-captcha.com library
+Home-page: https://github.com/AdminAnticaptcha/anticaptcha-python
+Author: Anti Admin
+Author-email: admin@anti-captcha.com
+License: MIT
+Keywords: anticaptcha anti captcha recognition recaptcha funcaptcha geetest hcaptcha
+Platform: UNKNOWN
+Requires-Dist: py (>=1.4.32)
+Requires-Dist: requests (>=2.22.0)
+
+anticaptchaofficial
+===================
+
+Official anti-captcha.com library for solving images with text, Recaptcha v2/v3, Funcaptcha and GeeTest.
+
+>>> pip3 install anticaptchaofficial
+
+.. code:: python
+
+    from anticaptchaofficial.recaptchav2proxyless import *
+
+    solver = recaptchaV2Proxyless()
+    solver.set_verbose(1)
+    solver.set_key("YOUR_API_KEY")
+    solver.set_website_url("https://website.com")
+    solver.set_website_key("SITE_KEY")
+
+    g_response = solver.solve_and_return_solution()
+    if g_response != 0:
+        print "g-response: "+g_response
+    else:
+        print "task finished with error "+solver.error_code
+
+
+
